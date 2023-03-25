@@ -7,8 +7,8 @@ folder = "/home/pi/masterproef"
 os.chdir(folder)
 
 now = datetime.now()
-small_fp = now.strftime(f"fotos/small-%Y-%m-%d-%Hu.jpg")
-large_fp = now.strftime(f"fotos/large-%Y-%m-%d-%Hu.jpg")
+small_fp = now.strftime(f"fotos/small-%Y-%m-%d-%H:%M.jpg")
+large_fp = now.strftime(f"fotos/large-%Y-%m-%d-%H:%M.jpg")
 
 def run(cmd):
     print(f"Running {cmd}")
