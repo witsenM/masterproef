@@ -33,7 +33,8 @@ def compute_stats(image):
     std = math.sqrt(var)
     return avg, std
 
-orig_fns = os.listdir('original').sort()
+orig_fns = os.listdir('original')
+orig_fns.sort()
 
 if not os.path.exists('ndvi'):
     os.mkdir('ndvi')
