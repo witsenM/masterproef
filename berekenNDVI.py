@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+import math
 from fastiecm import fastiecm
 
 def contrast_stretch(image):
@@ -21,25 +22,40 @@ def calc_ndvi(image):
     bottom[bottom==0] = 0.01
     ndvi = (b.astype(float) - r) / bottom
     return ndvi
-    
+
+def compute_stats(image):
+    raw_values = [value for line in image for value in line]
+    # Remap greyscale value [0, 255] to [-1.0, 1.0]
+    values = [2*v/255-1 for v in raw_values]
+
+    avg = sum(values)/len(values)
+    var = sum([(v-avg)*(v-avg) for v in values])/len(values)
+    std = math.sqrt(var)
+    return avg, std
+
 orig_fns = os.listdir('original')
 
 if not os.path.exists('ndvi'):
     os.mkdir('ndvi')
 
-for orig_fn in orig_fns:
-    orig_fp = f"original/{orig_fn}"
-    ndvi_bw_fp = f"ndvi/bw_{orig_fn}"
-    ndvi_color_fp = f"ndvi/color_{orig_fn}"
+with open('data.csv', 'w') as data_file:
+    data_file.write('foto\tavg\tstd\n')
+    for orig_fn in orig_fns:
+        orig_fp = f"original/{orig_fn}"
+        ndvi_bw_fp = f"ndvi/bw_{orig_fn}"
+        ndvi_color_fp = f"ndvi/color_{orig_fn}"
 
-    print(f"Processing {orig_fp} into {ndvi_bw_fp} and {ndvi_color_fp}")
+        print(f"Processing {orig_fp} into {ndvi_bw_fp} and {ndvi_color_fp}")
 
-    original = cv2.imread(orig_fp)
-    contrasted = contrast_stretch(original)
-    ndvi = calc_ndvi(contrasted)
-    ndvi_contrasted = contrast_stretch(ndvi)
-    cv2.imwrite(ndvi_bw_fp, ndvi_contrasted)
-    color_mapped_prep = ndvi_contrasted.astype(np.uint8)
-    color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
-    cv2.imwrite(ndvi_color_fp, color_mapped_image)
+        original = cv2.imread(orig_fp)
+        contrasted = contrast_stretch(original)
+        ndvi = calc_ndvi(contrasted)
+        ndvi_contrasted = contrast_stretch(ndvi)
+        cv2.imwrite(ndvi_bw_fp, ndvi_contrasted)
+        color_mapped_prep = ndvi_contrasted.astype(np.uint8)
+        color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
+        cv2.imwrite(ndvi_color_fp, color_mapped_image)
+
+        avg, std = compute_stats(ndvi_contrasted)
+        data_file.write(f"{orig_fn}\t{avg}\t{std}\n")
 
