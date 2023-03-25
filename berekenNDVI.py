@@ -24,6 +24,9 @@ def calc_ndvi(image):
     
 orig_fns = os.listdir('original')
 
+if not os.path.exists('ndvi'):
+    os.mkdir('ndvi')
+
 for orig_fn in orig_fns:
     orig_fp = f"original/{orig_fn}"
     ndvi_bw_fp = f"ndvi/bw_{orig_fn}"
