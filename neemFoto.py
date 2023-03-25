@@ -18,12 +18,16 @@ if now.time().hour % 4 == 0 and now.time().minute == 30:
     take_picture = True
 
 if take_picture:
-    folder = "/home/pi/masterproef"
+    folder = '/home/pi/masterproef'
+    subfolder = 'fotos'
 
     os.chdir(folder)
 
-    small_fp = now.strftime(f"fotos/small-%Y-%m-%d-%H:%M.jpg")
-    large_fp = now.strftime(f"fotos/large-%Y-%m-%d-%H:%M.jpg")
+    if not os.path.exists(subfolder):
+        os.mkdir(subfolder)
+
+    small_fp = now.strftime(f"{subfolder}/small-%Y-%m-%d-%H-%M.jpg")
+    large_fp = now.strftime(f"{subfolder}/large-%Y-%m-%d-%H-%M.jpg")
 
     def run(cmd):
         print(f"Running {cmd}")
