@@ -39,7 +39,7 @@ if not os.path.exists('ndvi'):
     os.mkdir('ndvi')
 
 with open('data.csv', 'w') as data_file:
-    data_file.write('foto\tavg\tstd\n')
+    data_file.write('foto,avg,std\n')
     for orig_fn in orig_fns:
         orig_fp = f"original/{orig_fn}"
         ndvi_bw_fp = f"ndvi/bw_{orig_fn}"
@@ -57,5 +57,5 @@ with open('data.csv', 'w') as data_file:
         cv2.imwrite(ndvi_color_fp, color_mapped_image)
 
         avg, std = compute_stats(ndvi_contrasted)
-        data_file.write(f"{orig_fn}\t{avg}\t{std}\n")
+        data_file.write(f"{orig_fn},{avg},{std}\n")
 
