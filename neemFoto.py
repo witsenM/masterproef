@@ -1,11 +1,14 @@
 import subprocess
+import os
 from datetime import datetime
 
-folder = "/home/pi/masterproef/fotos/"
+folder = "/home/pi/masterproef"
+
+os.chdir(folder)
 
 now = datetime.now()
-small_fp = now.strftime(f"{folder}small-%Y-%m-%d-%Hu.jpg")
-large_fp = now.strftime(f"{folder}large-%Y-%m-%d-%Hu.jpg")
+small_fp = now.strftime(f"fotos/small-%Y-%m-%d-%Hu.jpg")
+large_fp = now.strftime(f"fotos/large-%Y-%m-%d-%Hu.jpg")
 
 def run(cmd):
     print(f"Running {cmd}")
