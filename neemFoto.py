@@ -19,7 +19,7 @@ if now.time().hour % 4 == 0 and now.time().minute == 30:
 
 if take_picture:
     folder = '/home/pi/masterproef'
-    subfolder = 'fotos'
+    subfolder = 'original'
 
     os.chdir(folder)
 
