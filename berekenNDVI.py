@@ -9,7 +9,6 @@ def contrast_stretch(image):
     in_max = np.percentile(image, 95)
 
     out_min, out_max = 0.0, 255.0
-
     out = image - in_min
     out *= ((out_min - out_max)/(in_min-in_max))
     out += in_min
@@ -20,7 +19,11 @@ def calc_ndvi(image):
     b, g, r = cv2.split(image)
     bottom = (r.astype(float)+b.astype(float))
     bottom[bottom==0] = 0.01
+<<<<<<< HEAD
     ndvi = (r.astype(float) - b) / bottom
+=======
+    ndvi = (b.astype(float) - r) / bottom 
+>>>>>>> 848f88336f95b3755318b3b4e51c8e422f5e2a49
     return ndvi
 
 def compute_stats(image):
