@@ -18,23 +18,22 @@ if now.time().hour % 4 == 0 and now.time().minute == 30:
     take_picture = True
 
 if take_picture:
-    folder = '/home/pi/masterproef'
-    subfolder = 'original'
-
-    os.chdir(folder)
-
-    if not os.path.exists(subfolder):
-        os.mkdir(subfolder)
-
-    small_fp = now.strftime(f"{subfolder}/small-%Y-%m-%d-%H-%M.jpg")
-    large_fp = now.strftime(f"{subfolder}/large-%Y-%m-%d-%H-%M.jpg")
-
+    def chdir(folder):
+        os.chdir(folder)
+        if not os.path.exists('original'):
+            os.mkdir('original')
+        
     def run(cmd):
         print(f"Running {cmd}")
         subprocess.run(cmd, shell=True)
 
-    run(f"raspistill -t 1 -w 820 -h 616 -o {small_fp}")
+    chdir('/home/pi')
+    large_fp = now.strftime(f"original/large-%Y-%m-%d-%H-%M.jpg")
     run(f"raspistill -t 1 -o {large_fp}")
+    
+    chdir('/home/pi/masterproef')
+    small_fp = now.strftime(f"original/small-%Y-%m-%d-%H-%M.jpg")
+    run(f"raspistill -t 1 -w 820 -h 616 -o {small_fp}")
     run(f"git add {small_fp}")
     run(f"git commit -m {small_fp}")
     run(f"git pull")
