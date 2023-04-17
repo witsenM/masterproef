@@ -19,11 +19,7 @@ def calc_ndvi(image):
     b, g, r = cv2.split(image)
     bottom = (r.astype(float)+b.astype(float))
     bottom[bottom==0] = 0.01
-<<<<<<< HEAD
     ndvi = (r.astype(float) - b) / bottom
-=======
-    ndvi = (b.astype(float) - r) / bottom 
->>>>>>> 848f88336f95b3755318b3b4e51c8e422f5e2a49
     return ndvi
 
 def compute_stats(image):
