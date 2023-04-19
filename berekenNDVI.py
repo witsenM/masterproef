@@ -19,20 +19,16 @@ def calc_ndvi(image):
     b, g, r = cv2.split(image)
     bottom = (r.astype(float)+b.astype(float))
     bottom[bottom==0] = 0.01
-<<<<<<< HEAD
     ndvi = (r.astype(float) - b) / bottom
-=======
-    ndvi = (b.astype(float) - r) / bottom 
->>>>>>> 848f88336f95b3755318b3b4e51c8e422f5e2a49
     return ndvi
 
 def compute_stats(image):
     raw_values = [value for line in image for value in line]
     # Remap greyscale value [0, 255] to [-1.0, 1.0]
     values = [2*v/255-1 for v in raw_values]
-
-    avg = sum(values)/len(values)
-    var = sum([(v-avg)*(v-avg) for v in values])/len(values)
+    values = [x for x in values if x>=0]
+    avg = sum(values) / len(values)
+    var = sum([(v - avg) * (v - avg) for v in values]) / len(values)
     std = math.sqrt(var)
     return avg, std
 
