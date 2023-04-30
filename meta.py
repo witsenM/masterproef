@@ -1,11 +1,24 @@
+import glob
+import re
 import os
 
 class Meta:
+    def find_all():
+        r = r'original.(.+)\.jpg'
+        names = [re.search(r, fp).group(1) for fp in glob.glob('original/*.jpg')]
+        metas = [Meta(name) for name in names]
+        metas = [meta for meta in metas if meta.valid()]
+        metas.sort(key = lambda m: m.name())
+        return metas
+        
     def __init__(self, name):
         self.name_ = name
 
     def valid(self):
         return os.path.exists(self.orig_fp())
+
+    def name(self):
+        return self.name_
 
     def orig_fp(self):
         return f"original/{self.name_}.jpg"

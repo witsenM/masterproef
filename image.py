@@ -41,6 +41,10 @@ def gray_to_color(img):
     array_3d = np.repeat(img[:, :, np.newaxis], 3, axis=2)
     return array_3d
 
+def to_gray(img):
+    means = np.mean(img, axis=2, keepdims=True)
+    return np.broadcast_to(means, img.shape)
+
 def extract_ab_masks(img):
     # Check if the image is 3-dimensional (Height, Width, Channels)
     if len(img.shape) != 3 or img.shape[2] != 3:
@@ -53,8 +57,3 @@ def extract_ab_masks(img):
     mask_b = np.all(img == b, axis=2).astype(np.uint8)
 
     return (mask_a, mask_b)
-
-def is_valid_rgb_mask(img):
-    (a, b) = extract_ab_masks(img)
-
-    return np.all(a) and np.all(b)
