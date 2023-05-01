@@ -26,10 +26,19 @@ def compute_stats(image):
     raw_values = [value for line in image for value in line]
     # Remap greyscale value [0, 255] to [-1.0, 1.0]
     values = [2*v/255-1 for v in raw_values]
+<<<<<<< HEAD
     values = [x for x in values if 1 >= x >= 0]
     avg = sum(values) / len(values)
     var = sum([(x - avg) * (x - avg) for x in values]) / len(values)
     std = math.sqrt(var)
+=======
+    values = [x for x in values if x>=0]
+    avg, std = 0.0, 0.0
+    if values:
+        avg = sum(values) / len(values)
+        var = sum([(v - avg) * (v - avg) for v in values]) / len(values)
+        std = math.sqrt(var)
+>>>>>>> 93b9d5a3ebf8a4975068b9af944aa79365ded8f4
     return avg, std
 
 orig_fns = os.listdir('original')
@@ -56,6 +65,6 @@ with open('data.csv', 'w') as data_file:
         color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
         cv2.imwrite(ndvi_color_fp, color_mapped_image)
 
-        avg, std = compute_stats(ndvi_contrasted)
+        avg, std = compute_stats(ndvi)
         data_file.write(f"{orig_fn}\t{avg}\t{std}\n")
 
