@@ -65,9 +65,11 @@ class Analysis:
             # Remap greyscale value [0, 255] to [-1.0, 1.0]
             values = [2*v/255-1 for v in raw_values]
             values = [x for x in values if x>=0]
-            avg = sum(values) / len(values)
-            var = sum([(v - avg) * (v - avg) for v in values]) / len(values)
-            std = math.sqrt(var)
+            avg, std = 0.0, 0.0
+            if values:
+                avg = sum(values) / len(values)
+                var = sum([(v - avg) * (v - avg) for v in values]) / len(values)
+                std = math.sqrt(var)
             stats.append((avg, std))
         return stats
 
