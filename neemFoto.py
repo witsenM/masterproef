@@ -9,7 +9,7 @@ def uptime():
 
 take_picture = False
 
-if uptime() <= 5*60:
+if uptime() <= 3*60:
     take_picture = True
 
 now = datetime.now()
