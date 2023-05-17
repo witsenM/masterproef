@@ -57,20 +57,30 @@ class Analysis:
         image.save(self.meta_.rgb_mask_fp(), self.blank_rgb_mask())
 
     def compute_stats(self, ab):
+        # Compute the NDVI image
         img = self.ndvi()
 
         stats = []
         for m in ab:
-            raw_values = [value for line in img*m for value in line]
+            # Apply the mask `m` on the NDVI image `img`
+            masked_img = img*m
+
+            # Extract all the different values in a single list
+            raw_values = [value for line in masked_img for value in line]
+
             # Remap greyscale value [0, 255] to [-1.0, 1.0]
             values = [2*v/255-1 for v in raw_values]
+
+            # Only keep the values larger than 0
             values = [x for x in values if x>=0]
+
             avg, std = 0.0, 0.0
             if values:
                 avg = sum(values) / len(values)
                 var = sum([(v - avg) * (v - avg) for v in values]) / len(values)
                 std = math.sqrt(var)
             stats.append((avg, std))
+
         return stats
 
 import unittest

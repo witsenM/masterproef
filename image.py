@@ -13,13 +13,22 @@ def save(fp, img):
     cv2.imwrite(fp, img)
 
 def contrast_stretch(img):
+    # Compute the 5 and 95 percentile values for R, G and B combined
     in_min = np.percentile(img, 5)
     in_max = np.percentile(img, 95)
 
     out_min, out_max = 0.0, 255.0
+
+    factor = (out_max - out_min)/(in_max - in_min)
+
+    # Shift the 5% pct down to 0
     out = img - in_min
-    out *= ((out_min - out_max)/(in_min-in_max))
-    out += in_min
+
+    # Rescale
+    out *= factor
+
+    # Shift to ensure 5% pct becomes out_min
+    out += out_min
 
     return out
 
